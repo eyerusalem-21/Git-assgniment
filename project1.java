@@ -12,12 +12,16 @@ public class CompareTwoNumbers {
 			else if(num1 < num2){
 			System.out.println(num1 + " is less than " + num2);
 		}
-		else{
+		else if{
 			System.out.println(num1 + " is equal to " + num2);
 		}
+			else{
+			System.out.println("error entry");}
 		}
 		
 	}
 }
 
 version number 2.1
+
+version number changed to 3.0
