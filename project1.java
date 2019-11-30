@@ -1,3 +1,4 @@
+//compare two numbers
 public class CompareTwoNumbers {
  
 	public static void main(String[] args) {
