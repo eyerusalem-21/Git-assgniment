@@ -1,114 +1,347 @@
-import java.util.Scanner;
-  
-public class JavaApplication36{
-public static void main (String[] args) throws Exception {
-{
-    public JavaApplication36()
+package Currency;
+
+import java.io.Serializable;
+import java.util.Locale;
+
+public class Currency implements Serializable {
+
+    private static final long serialVersionUID = 8228779577409316939L;
+    private final java.util.Currency javaCurrency;
+    private final String numericCode;
+    private final String currencySymbolOverride; // use to override the currency code in java.util.Currency
+    private final String description;
+    private final int hashCode;
+    private final int scale; // the number of sub-units of the currency (e.g. US dollars have 100 sub-units, or pennies)
+
+    // supported currency codes
+
+    private static final String CURRENCY_CODE_USD = "USD";
+    private static final String CURRENCY_CODE_HKD = "HKD";
+    private static final String CURRENCY_CODE_MYR = "MYR";
+    private static final String CURRENCY_SYMBOL_USD = "$";
+    private static final String CURRENCY_SYMBOL_HKD = "HK$";
+    private static final String CURRENCY_SYMBOL_RM = "RM";
+ // supported currencies
+
+    public final static Currency US_DOLLAR = new Currency(java.util.Currency.getInstance(CURRENCY_CODE_USD), "840", 100, "US dollar");
+
+    public final static Currency HK_DOLLAR = new Currency(java.util.Currency.getInstance(CURRENCY_CODE_HKD), "344", 100, "Hong Kong dollar");
+
+    public final static Currency MALAYSIAN_RINGGIT = new Currency(java.util.Currency.getInstance(CURRENCY_CODE_MYR), "348", 70, "Malaysian ringgit", CURRENCY_SYMBOL_RM);
+
+    /**
+     * default constructor was added to work with jaxb generation / conversion
+     */
+
+    public Currency() {
+        javaCurrency = null;
+
+        numericCode = null;
+
+        currencySymbolOverride = null;
+
+        description = null;
+
+        hashCode = 0;
+
+        scale = 0;
+
+    }
+
+    /**
+     * Get a {@link Currency} by its ISO 4217 code
+     *
+     * @param pCurrencyCode
+     * @return the currency for the given code, or null if the code is not supported
+     */
+
+    public static Currency getByCurrencyCode(String pCurrencyCode)
+
     {
-        char us_dollar_sym = 36;
-        char pound_sym = 163;
-        char yen_sym = 165;
-        char euro_sym = 8364; 
-
-        String us_dollar = "Dollars"; 
-        String pound = "Pounds";
-        String yen = "Yen";
-        String euro = "Euros";
-        double rate = 0;
-
- // Interface
-        System.out.println("Welcome to the Currency Converter Program \n");
-        System.out.println("Use the following codes to input your currency choices: \n 1 - US dollars \n 2 - Euros \n 3 - British Pounds \n 4 - Japanese Yen \n");
-
-        // 
-        System.out.println("Please choose the input currency:");
-        Scanner in = new Scanner(System.in);
-int choice = in.nextInt(); 
-
-       String inType = null;
-        switch(choice) {
-        case 1: inType = "US Dollars >> " + us_dollar_sym;  break;
-        case 2: inType = "Euros >> " + euro_sym; break;
-        case 3: inType = "British Pounds >> " + pound_sym; break;
-        case 4: inType = "Japanese Yen >> " + yen_sym; break;
-        default:
-        System.out.println("Please restart the program & enter a number from the list.");
-        return;
-      }
-
- System.out.println("Please choose the output currency");
-        int output = in.nextInt();
-
-        System.out.printf("Now enter the input in " + inType);
-        double input = in.nextDouble(); 
-
-      if (choice == output) 
-        System.out.println("Same currency no need to convert");
-
-      if (choice == 1 && output == 2)
-        { 
-           double dollar_euro_rate = 0.78391;
-           rate = input * dollar_euro_rate;
-           System.out.printf( "%s" + input + " at a conversion rate of " + dollar_euro_rate + " Dollars to %s = %.2f\n", (char)us_dollar_sym, euro, rate);
+        if (CURRENCY_CODE_USD.equalsIgnoreCase(pCurrencyCode)) {
+            return US_DOLLAR;
         }
-        else if (choice == 1 && output == 3){ 
-           double dollar_pound_rate = 0.621484;
-           rate = input * dollar_pound_rate;
-           System.out.printf( "%s" + input + " at a conversion rate of " + dollar_pound_rate + " Dollars to %s = %.2f\n", (char)us_dollar_sym, pound, rate);
+
+        if (CURRENCY_CODE_HKD.equalsIgnoreCase(pCurrencyCode)) {
+            return HK_DOLLAR;
         }
-        else if (choice == 1 && output == 4){ 
-          double dollar_yen_rate = 107.174;
-          rate = input * dollar_yen_rate;
-          System.out.printf( "%s" + input + " at a conversion rate of " + dollar_yen_rate + " Dollars to %s = %.2f\n", (char)us_dollar_sym, yen, rate);
+
+        if (CURRENCY_CODE_MYR.equalsIgnoreCase(pCurrencyCode)) {
+            return MALAYSIAN_RINGGIT;
         }
-      if (choice == 2 && output == 1)
-      {
-          double euro_dollar_rate = 1.27579;
-          rate = input * euro_dollar_rate;
-          System.out.printf( "%s" + input + " at a conversion rate of " + euro_dollar_rate + " Euros to %s = %.2f\n", (char)euro_sym, us_dollar, rate);
+        return null;
+    }
+
+
+    public static Currency getByCurrencyAbbreviationOrSymbol(String pCurrencyAbbreviationOrSymbol) {
+        if (CURRENCY_SYMBOL_USD.equalsIgnoreCase(pCurrencyAbbreviationOrSymbol)) {
+            return US_DOLLAR;
+
         }
-        else if (choice == 2 && output == 3)
+        if (CURRENCY_SYMBOL_HKD.equalsIgnoreCase(pCurrencyAbbreviationOrSymbol))
+
         {
-          double euro_pound_rate = 0.792648;
-          rate = input * euro_pound_rate;
-          System.out.printf( "%s" + input + " at a conversion rate of " + euro_pound_rate + " Euros to %s = %.2f\n", (char)euro_sym, pound, rate);
+
+            return HK_DOLLAR;
+
         }
-        else if (choice == 2 && output == 4)
+
+
+        if (CURRENCY_SYMBOL_RM.equalsIgnoreCase(pCurrencyAbbreviationOrSymbol))
+
         {
-          double euro_yen_rate = 136.708;
-          rate = input * euro_yen_rate;
-          System.out.printf( "%s" + input + " at a conversion rate of " + euro_yen_rate + " Euros to %s = %.2f\n", (char)euro_sym, yen, rate);
+
+            return MALAYSIAN_RINGGIT;
+
         }
-      if (choice == 3 && output == 1)
-      {
-          double pound_dollar_rate = 1.60972;
-          System.out.printf( "%s" + input + " at a conversion rate of " + pound_dollar_rate + " Pounds to %s = %.2f\n", (char)pound_sym, us_dollar, rate);
-        }
-        else if (choice == 3 && output == 2)
+
+
+        return null;
+
+    }
+
+    /**
+     * Is the given currency code supported in the system?
+     *
+     * @param pCurrencyCode
+     * @return
+     */
+
+    public static boolean isSupportedCurrencyCode(String pCurrencyCode)
+
+    {
+
+        return getByCurrencyCode(pCurrencyCode) != null;
+
+    }
+
+    /**
+     * Constructor to use the currency code from java.util.Currency
+     *
+     * @param pCurrency
+     * @param pNumericCode
+     * @param pScale
+     * @param pDescription
+     */
+
+    private Currency(java.util.Currency pCurrency, String pNumericCode, int pScale, String pDescription)
+
+    {
+
+        this(pCurrency, pNumericCode, pScale, pDescription, null);
+
+    }
+
+    /**
+     * Constructor to override the currency code in java.util.Currency
+     *
+     * @param pCurrency
+     * @param pNumericCode
+     * @param pScale
+     * @param pDescription
+     * @param pCurrencySymbolOverride
+     */
+
+    private Currency(java.util.Currency pCurrency, String pNumericCode, int pScale, String pDescription, String pCurrencySymbolOverride)
+
+    {
+
+        javaCurrency = pCurrency;
+
+        numericCode = pNumericCode;
+
+        description = pDescription;
+
+        hashCode = Integer.parseInt(numericCode);
+
+        scale = pScale;
+
+        currencySymbolOverride = pCurrencySymbolOverride;
+
+    }
+
+
+    public boolean equals(Object o)
+
+    {
+
+        if (this == o)
+
         {
-          double pound_euro_rate = 1.26161;
-          System.out.printf( "%s" + input + " at a conversion rate of " + pound_euro_rate + " Pounds to %s = %.2f\n", (char)pound_sym, euro, rate);
+
+            return true;
+
         }
-        else if (choice == 3 && output == 4)
+
+        if (o == null || getClass() != o.getClass())
+
         {
-          double pound_yen_rate = 172.511;
-          System.out.printf( "%s" + input + " at a conversion rate of " + pound_yen_rate + " Pounds to %s = %.2f\n", (char)pound_sym, yen, rate);
+
+            return false;
+
         }
-      if (choice == 4 && output == 1)
-      { 
-          double yen_dollar_rate = 0.00932574;
-          System.out.printf( "%s" + input + " at a conversion rate of " + yen_dollar_rate + " Yen to %s = %.2f\n", (char)yen_sym, us_dollar, rate);
-        }
-        else if (choice == 4 && output == 2)
-        { 
-          double yen_euro_rate = 0.00730615;
-          System.out.printf( "%s" + input + " at a conversion rate of " + yen_euro_rate + " Yen to %s = %.2f\n", (char)yen_sym, euro, rate);
-        }
-        else if (choice == 4 && output == 3)
-        {
-          double yen_pound_rate = 0.00579135;
-          System.out.printf( "%s" + input + " at a conversion rate of " + yen_pound_rate + " Yen to %s = %.2f\n", (char)yen_sym, pound, rate);
-        }
-       System.out.println("Thank you for using the currency converter");
+
+
+        final Currency currency = (Currency) o;
+
+        return numericCode.equals(currency.numericCode);
+
+    }
+
+
+    public int hashCode()
+
+    {
+
+        return hashCode;
+
+    }
+
+    /**
+     * Gets the ISO 4217 currency code of this currency.
+     *
+     * @return the ISO 4217 currency code of this currency.
+     */
+
+    public String getCurrencyCode()
+
+    {
+
+        return javaCurrency.getCurrencyCode();
+
+    }
+
+    /**
+     * Gets the symbol of this currency for the default locale.
+    
+     */
+
+    public String getSymbol()
+
+    {
+
+        return currencySymbolOverride == null ? javaCurrency.getSymbol() : currencySymbolOverride;
+
+    }
+
+    /**
+     * @return has the default currency symbol been overridden
+     */
+
+    public boolean hasSymbolOverride()
+
+    {
+
+        return currencySymbolOverride != null;
+
+    }
+
+    /**
+     * Gets the symbol of this currency for the specified locale.
+     * For example, for the US Dollar, the symbol is "$" if the specified
+     * locale is the US, while for other locales it may be "US$". If no
+     * symbol can be determined, the ISO 4217 currency code is returned.
+     *
+     * @param locale the locale for which a display name for this currency is
+     *               needed
+     * @return the symbol of this currency for the specified locale
+     * @throws NullPointerException if <code>locale</code> is null
+     */
+
+    public String getSymbol(Locale locale)
+
+    {
+
+        return javaCurrency.getSymbol(locale);
+
+    }
+
+    /**
+     * Gets the three-digit numeric code for this currency.
+     *
+     * @return the three-digit numeric code for this currency.
+     */
+
+    public String getNumericCode()
+
+    {
+
+        return numericCode;
+
+    }
+
+    /**
+     * @return the number of sub-units of the base currency
+     */
+
+    public int getScale()
+
+    {
+        return scale;
+
+    }
+
+    /**
+     * Gets the description for this currency (i.e. "US dollar")
+     *
+     * @return the description for this currency.
+     */
+
+    public String getDescription()
+
+    {
+
+        return description;
+
+    }
+
+    /**
+     * Gets the default number of fraction digits used with this currency.
+     * For example, the default number of fraction digits for the Euro is 2,
+     * while for the Japanese Yen it's 0.
+     * In the case of pseudo-currencies, such as IMF Special Drawing Rights,
+     * -1 is returned.
+     *
+     * @return the default number of fraction digits used with this currency
+     */
+
+    public int getDefaultFractionDigits()
+
+    {
+
+        return javaCurrency.getDefaultFractionDigits();
+
+    }
+
+    /**
+     * Returns the ISO 4217 currency code of this currency.
+     *
+     * @return the ISO 4217 currency code of this currency
+     */
+
+    public String toString()
+
+    {
+
+        return javaCurrency.toString();
+
+    }
+
+
+    public java.util.Currency getJavaCurrency()
+
+    {
+
+        return javaCurrency;
+
+    }
+
+    /**
+     * Creates a new instance, will only be used by Jaxb.
+     */
+
+    public static Currency newInstance() {
+
+        return new Currency();
     }
 }
